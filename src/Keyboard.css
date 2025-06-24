@@ -25,10 +25,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  outline: none;
 }
 
 .key:hover {
   background-color: #9ca3a3;
+}
+
+.key:focus {
+  outline: none;
 }
 
 .key.special-key {

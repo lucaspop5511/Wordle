@@ -44,10 +44,18 @@ html, body {
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
+  align-self: center;
+  width: auto;
+  max-width: 200px;
+  outline: none;
 }
 
 .reset-button:hover {
   background-color: #5a9a54;
+}
+
+.reset-button:focus {
+  outline: none;
 }
 
 .game-status {
@@ -80,17 +88,4 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.invalid-word-notice {
-  position: absolute;
-  right: -120px;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(220, 53, 69, 0.1);
-  color: #dc3545;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 14px;
-  white-space: nowrap;
 }

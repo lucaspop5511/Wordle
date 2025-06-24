@@ -70,11 +70,30 @@ function App() {
   const [isValidating, setIsValidating] = useState(false);
   const [gameResult, setGameResult] = useState(''); // 'won', 'lost', or ''
   const [invalidWord, setInvalidWord] = useState(false);
+  const [wordList, setWordList] = useState([]);
 
   useEffect(() => {
-    // Pick a random word when component mounts
-    const randomWord = WORDLE_WORDS[Math.floor(Math.random() * WORDLE_WORDS.length)];
-    setTargetWord(randomWord);
+    // Load dictionary from file
+    const loadDictionary = async () => {
+      try {
+        const response = await fetch('/dictionary.txt');
+        const text = await response.text();
+        const words = text.trim().split('\n').map(word => word.trim().toUpperCase());
+        setWordList(words);
+        
+        // Pick a random word when dictionary is loaded
+        const randomWord = words[Math.floor(Math.random() * words.length)];
+        setTargetWord(randomWord);
+      } catch (error) {
+        console.error('Failed to load dictionary:', error);
+        // Fallback to hardcoded words
+        setWordList(WORDLE_WORDS);
+        const randomWord = WORDLE_WORDS[Math.floor(Math.random() * WORDLE_WORDS.length)];
+        setTargetWord(randomWord);
+      }
+    };
+  
+    loadDictionary();
   }, []);
 
   // Physical keyboard listener
@@ -96,14 +115,8 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentGuess, currentRow, gameOver, targetWord]);
 
-  const validateWord = async (word) => {
-    try {
-      const response = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word.toLowerCase()}`);
-      return response.ok;
-    } catch (error) {
-      console.error('Dictionary API error:', error);
-      return true; // If API fails, allow the word (fallback)
-    }
+  const validateWord = (word) => {
+    return wordList.includes(word.toUpperCase());
   };
 
   const updateKeyboardStatus = (guess) => {
@@ -124,7 +137,7 @@ function App() {
     setKeyboardStatus(newKeyboardStatus);
   };
 
-  const handleKeyPress = async (key) => {
+  const handleKeyPress = (key) => {
     if (gameOver || isValidating) return;
 
     if (key === 'ENTER') {
@@ -132,8 +145,8 @@ function App() {
         setIsValidating(true);
         setInvalidWord(false);
         
-        // Validate the word
-        const isValid = await validateWord(currentGuess);
+        // Validate the word (now instant)
+        const isValid = validateWord(currentGuess);
         
         if (!isValid) {
           setInvalidWord(true);
@@ -169,7 +182,7 @@ function App() {
   };
 
   const resetGame = () => {
-    const randomWord = WORDLE_WORDS[Math.floor(Math.random() * WORDLE_WORDS.length)];
+    const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
     setTargetWord(randomWord);
     setCurrentGuess('');
     setGuesses([]);
@@ -199,7 +212,6 @@ function App() {
             gameResult={gameResult}
             invalidWord={invalidWord}
           />
-          {invalidWord && <div className="invalid-word-notice">Word not valid</div>}
         </div>
         <Keyboard onKeyPress={handleKeyPress} keyboardStatus={keyboardStatus} />
       </header>
