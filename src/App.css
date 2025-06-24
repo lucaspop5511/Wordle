@@ -1,0 +1,96 @@
+html, body {
+  overflow: hidden;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.App {
+  text-align: center;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.App-header {
+  background-color: #121213;
+  padding: 20px;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.App-header h1 {
+  margin-bottom: 20px;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.reset-button {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background-color: #6aaa64;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.reset-button:hover {
+  background-color: #5a9a54;
+}
+
+.game-status {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.status-message {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+}
+
+.status-message.win {
+  color: #6aaa64;
+  background-color: rgba(106, 170, 100, 0.1);
+}
+
+.status-message.lose {
+  color: #c9b458;
+  background-color: rgba(201, 180, 88, 0.1);
+}
+
+.game-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.invalid-word-notice {
+  position: absolute;
+  right: -120px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+}

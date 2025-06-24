@@ -1,0 +1,52 @@
+.words-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin: 20px 0;
+}
+
+.word-row {
+  display: flex;
+  gap: 5px;
+}
+
+.letter-box {
+  width: 60px;
+  height: 60px;
+  border: 2px solid #3a3a3c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background-color: #121213;
+}
+
+.letter-box.correct {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+}
+
+.letter-box.present {
+  background-color: #c9b458;
+  border-color: #c9b458;
+}
+
+.letter-box.absent {
+  background-color: #787c7e;
+  border-color: #787c7e;
+}
+
+.letter-box.invalid {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
