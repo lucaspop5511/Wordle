@@ -1,64 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Words from './Words';
 import Keyboard from './Keyboard';
+import History from './History';
 import './App.css';
-
-// Original Wordle word list (answers only - common 5-letter words)
-const WORDLE_WORDS = [
-  'ABOUT', 'ABOVE', 'ABUSE', 'ACTOR', 'ACUTE', 'ADMIT', 'ADOPT', 'ADULT', 'AFTER', 'AGAIN',
-  'AGENT', 'AGREE', 'AHEAD', 'ALARM', 'ALBUM', 'ALERT', 'ALIEN', 'ALIGN', 'ALIKE', 'ALIVE',
-  'ALLOW', 'ALONE', 'ALONG', 'ALTER', 'AMONG', 'ANGER', 'ANGLE', 'ANGRY', 'APART', 'APPLE',
-  'APPLY', 'ARENA', 'ARGUE', 'ARISE', 'ARRAY', 'ASIDE', 'ASSET', 'AUDIO', 'AUDIT', 'AVOID',
-  'AWAKE', 'AWARE', 'BADLY', 'BAKER', 'BASES', 'BASIC', 'BEACH', 'BEGAN', 'BEGIN', 'BEING',
-  'BELOW', 'BENCH', 'BILLY', 'BIRTH', 'BLACK', 'BLAME', 'BLANK', 'BLAST', 'BLIND', 'BLOCK',
-  'BLOOD', 'BOARD', 'BOAST', 'BOATS', 'BOBBY', 'BONES', 'BONUS', 'BOOST', 'BOOTH', 'BOUND',
-  'BRAIN', 'BRAND', 'BRASS', 'BRAVE', 'BREAD', 'BREAK', 'BREED', 'BRIEF', 'BRING', 'BROAD',
-  'BROKE', 'BROWN', 'BUILD', 'BUILT', 'BUYER', 'CABLE', 'CALIF', 'CARRY', 'CATCH', 'CAUSE',
-  'CHAIN', 'CHAIR', 'CHAOS', 'CHARM', 'CHART', 'CHASE', 'CHEAP', 'CHECK', 'CHEST', 'CHIEF',
-  'CHILD', 'CHINA', 'CHOSE', 'CIVIL', 'CLAIM', 'CLASS', 'CLEAN', 'CLEAR', 'CLICK', 'CLIMB',
-  'CLOCK', 'CLOSE', 'CLOUD', 'COACH', 'COAST', 'COULD', 'COUNT', 'COURT', 'COVER', 'CRAFT',
-  'CRASH', 'CRAZY', 'CREAM', 'CRIME', 'CROSS', 'CROWD', 'CROWN', 'CRUDE', 'CURVE', 'CYCLE',
-  'DAILY', 'DANCE', 'DATED', 'DEALT', 'DEATH', 'DEBUT', 'DELAY', 'DEPTH', 'DOING', 'DOUBT',
-  'DOZEN', 'DRAFT', 'DRAMA', 'DRANK', 'DREAM', 'DRESS', 'DRILL', 'DRINK', 'DRIVE', 'DROVE',
-  'DYING', 'EAGER', 'EARLY', 'EARTH', 'EIGHT', 'ELITE', 'EMPTY', 'ENEMY', 'ENJOY', 'ENTER',
-  'ENTRY', 'EQUAL', 'ERROR', 'EVENT', 'EVERY', 'EXACT', 'EXIST', 'EXTRA', 'FAITH', 'FALSE',
-  'FAULT', 'FIBER', 'FIELD', 'FIFTH', 'FIFTY', 'FIGHT', 'FINAL', 'FIRST', 'FIXED', 'FLASH',
-  'FLEET', 'FLOOR', 'FLUID', 'FOCUS', 'FORCE', 'FORTH', 'FORTY', 'FORUM', 'FOUND', 'FRAME',
-  'FRANK', 'FRAUD', 'FRESH', 'FRONT', 'FROST', 'FUNNY', 'GIANT', 'GIVEN', 'GLASS', 'GLOBE',
-  'GOING', 'GRACE', 'GRADE', 'GRAND', 'GRANT', 'GRASS', 'GRAVE', 'GREAT', 'GREEN', 'GROSS',
-  'GROUP', 'GROWN', 'GUARD', 'GUESS', 'GUEST', 'GUIDE', 'HAPPY', 'HARRY', 'HEART', 'HEAVY',
-  'HENCE', 'HENRY', 'HORSE', 'HOTEL', 'HOUSE', 'HUMAN', 'IDEAL', 'IMAGE', 'INDEX', 'INNER',
-  'INPUT', 'ISSUE', 'JAPAN', 'JIMMY', 'JOINT', 'JONES', 'JUDGE', 'KNOWN', 'LABEL', 'LARGE',
-  'LASER', 'LATER', 'LAUGH', 'LAYER', 'LEARN', 'LEASE', 'LEAST', 'LEAVE', 'LEGAL', 'LEVEL',
-  'LEWIS', 'LIGHT', 'LIMIT', 'LINKS', 'LIVES', 'LOCAL', 'LOOSE', 'LOWER', 'LUCKY', 'LUNCH',
-  'LYING', 'MAGIC', 'MAJOR', 'MAKER', 'MARCH', 'MARIA', 'MATCH', 'MAYBE', 'MAYOR', 'MEANT',
-  'MEDIA', 'METAL', 'MIGHT', 'MINOR', 'MINUS', 'MIXED', 'MODEL', 'MONEY', 'MONTH', 'MORAL',
-  'MOTOR', 'MOUNT', 'MOUSE', 'MOUTH', 'MOVED', 'MOVIE', 'MUSIC', 'NEEDS', 'NEVER', 'NEWLY',
-  'NIGHT', 'NOISE', 'NORTH', 'NOTED', 'NOVEL', 'NURSE', 'OCCUR', 'OCEAN', 'OFFER', 'OFTEN',
-  'ORDER', 'OTHER', 'OUGHT', 'PAINT', 'PANEL', 'PAPER', 'PARTY', 'PEACE', 'PETER', 'PHASE',
-  'PHONE', 'PHOTO', 'PIANO', 'PIECE', 'PILOT', 'PITCH', 'PLACE', 'PLAIN', 'PLANE', 'PLANT',
-  'PLATE', 'POINT', 'POUND', 'POWER', 'PRESS', 'PRICE', 'PRIDE', 'PRIME', 'PRINT', 'PRIOR',
-  'PRIZE', 'PROOF', 'PROUD', 'PROVE', 'QUEEN', 'QUICK', 'QUIET', 'QUITE', 'RADIO', 'RAISE',
-  'RANGE', 'RAPID', 'RATIO', 'REACH', 'READY', 'REALM', 'REBEL', 'REFER', 'RELAX', 'REMOT',
-  'REPLY', 'RIGHT', 'RIGID', 'RIVER', 'ROBOT', 'ROGER', 'ROMAN', 'ROUGH', 'ROUND', 'ROUTE',
-  'ROYAL', 'RURAL', 'SCALE', 'SCENE', 'SCOPE', 'SCORE', 'SENSE', 'SERVE', 'SETUP', 'SEVEN',
-  'SHALL', 'SHAPE', 'SHARE', 'SHARP', 'SHEET', 'SHELF', 'SHELL', 'SHIFT', 'SHINE', 'SHIRT',
-  'SHOCK', 'SHOOT', 'SHORT', 'SHOWN', 'SIDES', 'SIGHT', 'SILLY', 'SINCE', 'SIXTH', 'SIXTY',
-  'SIZED', 'SKILL', 'SLEEP', 'SLIDE', 'SMALL', 'SMART', 'SMILE', 'SMITH', 'SMOKE', 'SOLID',
-  'SOLVE', 'SORRY', 'SOUND', 'SOUTH', 'SPACE', 'SPARE', 'SPEAK', 'SPEED', 'SPEND', 'SPENT',
-  'SPLIT', 'SPOKE', 'SPORT', 'STAFF', 'STAGE', 'STAKE', 'STAND', 'START', 'STATE', 'STEAM',
-  'STEEL', 'STICK', 'STILL', 'STOCK', 'STONE', 'STOOD', 'STORE', 'STORM', 'STORY', 'STRIP',
-  'STUCK', 'STUDY', 'STUFF', 'STYLE', 'SUGAR', 'SUITE', 'SUPER', 'SWEET', 'TABLE', 'TAKEN',
-  'TASTE', 'TAXES', 'TEACH', 'TEAMS', 'TEETH', 'TEMPO', 'TERMS', 'TESTS', 'THANK', 'THEFT',
-  'THEIR', 'THEME', 'THERE', 'THESE', 'THICK', 'THING', 'THINK', 'THIRD', 'THOSE', 'THREE',
-  'THREW', 'THROW', 'THUMB', 'TIGHT', 'TIRED', 'TITLE', 'TODAY', 'TOPIC', 'TOTAL', 'TOUCH',
-  'TOUGH', 'TOWER', 'TRACK', 'TRADE', 'TRAIN', 'TREAT', 'TREND', 'TRIAL', 'TRIBE', 'TRICK',
-  'TRIED', 'TRIES', 'TRUCK', 'TRULY', 'TRUNK', 'TRUST', 'TRUTH', 'TWICE', 'UNCLE', 'UNDER',
-  'UNDUE', 'UNION', 'UNITY', 'UNTIL', 'UPPER', 'UPSET', 'URBAN', 'USAGE', 'USUAL', 'VALID',
-  'VALUE', 'VIDEO', 'VIRUS', 'VISIT', 'VITAL', 'VOCAL', 'VOICE', 'WASTE', 'WATCH', 'WATER',
-  'WHEEL', 'WHERE', 'WHICH', 'WHILE', 'WHITE', 'WHOLE', 'WHOSE', 'WOMAN', 'WOMEN', 'WORLD',
-  'WORRY', 'WORSE', 'WORST', 'WORTH', 'WOULD', 'WRITE', 'WRONG', 'WROTE', 'YOUNG', 'YOUTH'
-];
 
 function App() {
   const [targetWord, setTargetWord] = useState('');
@@ -71,6 +15,53 @@ function App() {
   const [gameResult, setGameResult] = useState(''); // 'won', 'lost', or ''
   const [invalidWord, setInvalidWord] = useState(false);
   const [wordList, setWordList] = useState([]);
+  const [activePanel, setActivePanel] = useState('game'); // 'game' or 'history'
+  const [gameHistory, setGameHistory] = useState([]);
+  const [displayWord, setDisplayWord] = useState('*****');
+
+  // Load game history from localStorage on component mount
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('wordleHistory');
+    if (savedHistory) {
+      try {
+        setGameHistory(JSON.parse(savedHistory));
+      } catch (error) {
+        console.error('Failed to load game history:', error);
+      }
+    }
+  }, []);
+
+  // Save game history to localStorage whenever it changes
+  useEffect(() => {
+    if (gameHistory.length > 0) {
+      localStorage.setItem('wordleHistory', JSON.stringify(gameHistory));
+    }
+  }, [gameHistory]);
+
+  // Update display word based on submitted guesses only
+  useEffect(() => {
+    if (!targetWord) return;
+    
+    let newDisplayWord = targetWord.split('').map(() => '*');
+    
+    // Check only completed/submitted guesses for correct positions
+    guesses.forEach(guess => {
+      if (guess && guess.length === 5) {
+        for (let i = 0; i < 5; i++) {
+          if (guess[i] === targetWord[i]) {
+            newDisplayWord[i] = targetWord[i];
+          }
+        }
+      }
+    });
+    
+    // If game is over and lost, show the full word
+    if (gameResult === 'lost') {
+      newDisplayWord = targetWord.split('');
+    }
+    
+    setDisplayWord(newDisplayWord.join(''));
+  }, [targetWord, guesses, gameResult]);
 
   useEffect(() => {
     // Load dictionary from file
@@ -86,10 +77,7 @@ function App() {
         setTargetWord(randomWord);
       } catch (error) {
         console.error('Failed to load dictionary:', error);
-        // Fallback to hardcoded words
-        setWordList(WORDLE_WORDS);
-        const randomWord = WORDLE_WORDS[Math.floor(Math.random() * WORDLE_WORDS.length)];
-        setTargetWord(randomWord);
+        alert('Failed to load word dictionary. Please refresh the page.');
       }
     };
   
@@ -99,6 +87,8 @@ function App() {
   // Physical keyboard listener
   useEffect(() => {
     const handleKeyDown = (event) => {
+      if (activePanel !== 'game') return; // Only handle keys when game panel is active
+      
       event.preventDefault();
       const key = event.key.toUpperCase();
       
@@ -113,7 +103,7 @@ function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentGuess, currentRow, gameOver, targetWord]);
+  }, [currentGuess, currentRow, gameOver, targetWord, activePanel]);
 
   const validateWord = (word) => {
     return wordList.includes(word.toUpperCase());
@@ -137,15 +127,30 @@ function App() {
     setKeyboardStatus(newKeyboardStatus);
   };
 
+  const saveGameToHistory = (won, finalGuesses) => {
+    const gameData = {
+      targetWord: targetWord,
+      guesses: finalGuesses,
+      won: won,
+      date: new Date().toISOString(),
+    };
+    
+    setGameHistory(prev => {
+      const newHistory = [...prev, gameData];
+      // Keep only the last 12 games
+      return newHistory.slice(-12);
+    });
+  };
+
   const handleKeyPress = (key) => {
-    if (gameOver || isValidating) return;
+    if (gameOver || isValidating || activePanel !== 'game') return;
 
     if (key === 'ENTER') {
       if (currentGuess.length === 5) {
         setIsValidating(true);
         setInvalidWord(false);
         
-        // Validate the word (now instant)
+        // Validate the word
         const isValid = validateWord(currentGuess);
         
         if (!isValid) {
@@ -163,9 +168,11 @@ function App() {
         if (currentGuess === targetWord) {
           setGameOver(true);
           setGameResult('won');
+          saveGameToHistory(true, newGuesses);
         } else if (currentRow === 5) {
           setGameOver(true);
           setGameResult('lost');
+          saveGameToHistory(false, newGuesses);
         } else {
           setCurrentRow(currentRow + 1);
         }
@@ -182,6 +189,8 @@ function App() {
   };
 
   const resetGame = () => {
+    if (wordList.length === 0) return;
+    
     const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
     setTargetWord(randomWord);
     setCurrentGuess('');
@@ -192,28 +201,70 @@ function App() {
     setGameResult('');
     setIsValidating(false);
     setInvalidWord(false);
+    setDisplayWord('*****');
+    setActivePanel('game');
+  };
+
+  const togglePanel = () => {
+    setActivePanel(prev => prev === 'game' ? 'history' : 'game');
+  };
+
+  const clearHistory = () => {
+    setGameHistory([]);
+    localStorage.removeItem('wordleHistory');
+  };
+
+  const getHeaderTitle = () => {
+    if (activePanel === 'history') {
+      return 'HISTORY';
+    }
+    return displayWord;
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Wordle Game</h1>
-        <button onClick={resetGame} className="reset-button">New Game</button>
-        <div className="game-status">
-          {gameResult === 'won' && <div className="status-message win">You Won!</div>}
-          {gameResult === 'lost' && <div className="status-message lose">The word was: {targetWord}</div>}
+        <h1 className='app-title'>Wordle Game</h1>
+        
+        <div className="game-section">
+          <div className="section-header">
+            <div className="header-title">{getHeaderTitle()}</div>
+            <div className="header-controls">
+              {activePanel === 'game' ? (
+                <button onClick={resetGame} className="header-button new-game-btn">
+                  🔄
+                </button>
+              ) : (
+                <button onClick={clearHistory} className="header-button trash-btn">
+                  🗑️
+                </button>
+              )}
+              <button onClick={togglePanel} className="header-button menu-btn">
+                {activePanel === 'game' ? '☰' : '▦'}
+              </button>
+            </div>
+          </div>
+          
+          <div className="main-content">
+            {activePanel === 'game' ? (
+              <Words 
+                guesses={guesses}
+                currentGuess={currentGuess}
+                currentRow={currentRow}
+                targetWord={targetWord}
+                gameResult={gameResult}
+                invalidWord={invalidWord}
+              />
+            ) : (
+              <History 
+                gameHistory={gameHistory}
+                onClearHistory={clearHistory}
+              />
+            )}
+          </div>
+          
+          <Keyboard onKeyPress={handleKeyPress} keyboardStatus={keyboardStatus} />
         </div>
-        <div className="game-container">
-          <Words 
-            guesses={guesses}
-            currentGuess={currentGuess}
-            currentRow={currentRow}
-            targetWord={targetWord}
-            gameResult={gameResult}
-            invalidWord={invalidWord}
-          />
-        </div>
-        <Keyboard onKeyPress={handleKeyPress} keyboardStatus={keyboardStatus} />
       </header>
     </div>
   );

@@ -26,66 +26,126 @@ html, body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
 
 .App-header h1 {
-  margin-bottom: 20px;
+  margin: 0 0 30px 0;
   font-size: 36px;
   font-weight: bold;
 }
 
-.reset-button {
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  background-color: #6aaa64;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-  align-self: center;
-  width: auto;
-  max-width: 200px;
-  outline: none;
+.app-title {
+  padding-bottom: 50px;
+  padding: 25px 0 50px 0;
 }
 
-.reset-button:hover {
-  background-color: #5a9a54;
-}
-
-.reset-button:focus {
-  outline: none;
-}
-
-.game-status {
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 10px 0;
-}
-
-.status-message {
-  font-size: 20px;
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 8px;
-}
-
-.status-message.win {
-  color: #6aaa64;
-  background-color: rgba(106, 170, 100, 0.1);
-}
-
-.status-message.lose {
-  color: #c9b458;
-  background-color: rgba(201, 180, 88, 0.1);
-}
-
-.game-container {
-  position: relative;
+.game-section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 500px;
+  flex: 1;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 340px;
+  margin-bottom: 8px;
+  padding: 0;
+}
+
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 4px;
+  color: #ffffff;
+  flex: 1;
+  text-align: left;
+}
+
+.header-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header-button {
+  background: none;
+  color: white;
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.header-button:hover {
+  transform: scale(1.05);
+}
+
+.header-button:active {
+  transform: scale(0.95);
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 50px;
+  height: 390px;
+}
+
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 15px;
+  }
+  
+  .App-header h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+  
+  .header-title {
+    font-size: 20px;
+    letter-spacing: 3px;
+  }
+  
+  .header-button {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+  
+  .header-controls {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .App-header h1 {
+    font-size: 24px;
+  }
+  
+  .header-title {
+    font-size: 18px;
+    letter-spacing: 2px;
+  }
+  
+  .game-section {
+    max-width: 100%;
+  }
 }

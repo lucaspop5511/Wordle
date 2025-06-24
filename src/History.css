@@ -1,0 +1,95 @@
+.history-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  width: 340px;
+  min-height: 409px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.history-games {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  height: 300px;
+  margin-bottom: 15px;
+}
+
+.history-game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.history-word {
+  font-size: 10px;
+  font-weight: bold;
+  margin-bottom: 4px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.history-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  justify-content: center;
+}
+
+.history-row {
+  display: flex;
+  gap: 2px;
+}
+
+.history-square {
+  width: 10px;
+  height: 10px;
+  border-radius: 1px;
+  background-color: #3a3a3c;
+  border: 1px solid #2a2a2c;
+}
+
+.history-square.correct {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+}
+
+.history-square.present {
+  background-color: #c9b458;
+  border-color: #c9b458;
+}
+
+.history-square.absent {
+  background-color: #787c7e;
+  border-color: #787c7e;
+}
+
+.no-history {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 16px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.average-score {
+  font-size: 12px;
+  font-weight: bold;
+  color: #8d8d8b;
+  display: flex;
+  position: absolute;
+  align-self: first baseline;
+  transform: translateY(360px);
+}
