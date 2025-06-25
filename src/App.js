@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRotateRight, faBars, faBorderAll, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Words from './Words';
 import Keyboard from './Keyboard';
 import History from './History';
+import CustomAlert from './CustomAlert';
 import './App.css';
 
 function App() {
@@ -18,6 +21,7 @@ function App() {
   const [activePanel, setActivePanel] = useState('game'); // 'game' or 'history'
   const [gameHistory, setGameHistory] = useState([]);
   const [displayWord, setDisplayWord] = useState('*****');
+  const [showAlert, setShowAlert] = useState(false);
 
   // Load game history from localStorage on component mount
   useEffect(() => {
@@ -210,8 +214,17 @@ function App() {
   };
 
   const clearHistory = () => {
+    setShowAlert(true);
+  };
+
+  const handleConfirmClearHistory = () => {
     setGameHistory([]);
     localStorage.removeItem('wordleHistory');
+    setShowAlert(false);
+  };
+
+  const handleCancelClearHistory = () => {
+    setShowAlert(false);
   };
 
   const getHeaderTitle = () => {
@@ -224,7 +237,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 className='app-title'>Wordle Game</h1>
+        <img className='app-title' src='/titlelogo.png' alt='WordL'/>
         
         <div className="game-section">
           <div className="section-header">
@@ -232,15 +245,19 @@ function App() {
             <div className="header-controls">
               {activePanel === 'game' ? (
                 <button onClick={resetGame} className="header-button new-game-btn">
-                  🔄
+                  <FontAwesomeIcon icon={faArrowRotateRight} />
                 </button>
               ) : (
                 <button onClick={clearHistory} className="header-button trash-btn">
-                  🗑️
+                  <FontAwesomeIcon icon={faTrash} />
                 </button>
               )}
               <button onClick={togglePanel} className="header-button menu-btn">
-                {activePanel === 'game' ? '☰' : '▦'}
+                {activePanel === 'game' ? (
+                  <FontAwesomeIcon icon={faBars} />
+                ) : (
+                  <FontAwesomeIcon icon={faBorderAll} />
+                )}
               </button>
             </div>
           </div>
@@ -266,6 +283,16 @@ function App() {
           <Keyboard onKeyPress={handleKeyPress} keyboardStatus={keyboardStatus} />
         </div>
       </header>
+      
+      <CustomAlert
+        isOpen={showAlert}
+        title="Really?"
+        message="Are you sure you want to delete all game history?"
+        onConfirm={handleConfirmClearHistory}
+        onCancel={handleCancelClearHistory}
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar } from '@fortawesome/free-solid-svg-icons';
 import './History.css';
 
 const History = ({ gameHistory, onClearHistory }) => {
@@ -34,6 +36,40 @@ const History = ({ gameHistory, onClearHistory }) => {
     }
     
     return 'absent';
+  };
+
+  const renderStars = () => {
+    if (gameHistory.length === 0) return '☆☆☆☆☆';
+    
+    const wonGames = gameHistory.filter(g => g.won);
+    if (wonGames.length === 0) return '☆☆☆☆☆';
+    
+    const averageScore = Math.round(
+      wonGames.reduce((sum, g) => sum + Math.max(1, 7 - g.guesses.length), 0) / wonGames.length
+    );
+    
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (i <= averageScore) {
+        stars.push(
+          <FontAwesomeIcon 
+            key={i} 
+            icon={faStar} 
+            style={{ color: '#6aaa64' }} // Green color for filled stars
+          />
+        );
+      } else {
+        stars.push(
+          <FontAwesomeIcon 
+            key={i} 
+            icon={faStar} 
+            style={{ color: '#c9b458' }} // Yellow color for empty stars
+          />
+        );
+      }
+    }
+    
+    return stars;
   };
 
   const renderGameGrid = (game, index) => {
@@ -78,21 +114,7 @@ const History = ({ gameHistory, onClearHistory }) => {
       
       {gameHistory.length > 0 && (
         <div className="average-score">
-          AVERAGE SCORE: {
-            gameHistory.filter(g => g.won).length > 0 
-              ? '⭐'.repeat(Math.round(
-                  gameHistory
-                    .filter(g => g.won)
-                    .reduce((sum, g) => sum + Math.max(1, 7 - g.guesses.length), 0) / 
-                  gameHistory.filter(g => g.won).length
-                )) + '☆'.repeat(Math.max(0, 5 - Math.round(
-                  gameHistory
-                    .filter(g => g.won)
-                    .reduce((sum, g) => sum + Math.max(1, 7 - g.guesses.length), 0) / 
-                  gameHistory.filter(g => g.won).length
-                )))
-              : '☆☆☆☆☆'
-          }
+          AVERAGE SCORE: {renderStars()}
         </div>
       )}
     </div>

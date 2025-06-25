@@ -36,8 +36,9 @@ html, body {
 }
 
 .app-title {
-  padding-bottom: 50px;
-  padding: 25px 0 50px 0;
+  padding-top: 5px;
+  height: 100px;
+  margin-bottom: 55px;
 }
 
 .game-section {
@@ -96,6 +97,10 @@ html, body {
 
 .header-button:active {
   transform: scale(0.95);
+}
+
+.header-button svg {
+  color: white;
 }
 
 .main-content {
