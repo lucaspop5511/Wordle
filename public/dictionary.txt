@@ -528,7 +528,6 @@ deign
 deity
 delay
 delta
-delve
 demon
 demur
 denim
@@ -2174,7 +2173,6 @@ valve
 vapid
 vapor
 vault
-vaunt
 vegan
 venom
 venue

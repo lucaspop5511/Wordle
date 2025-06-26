@@ -71,7 +71,7 @@ function App() {
     // Load dictionary from file
     const loadDictionary = async () => {
       try {
-        const response = await fetch('/dictionary.txt');
+        const response = await fetch('/dictionaryBrands.txt');
         const text = await response.text();
         const words = text.trim().split('\n').map(word => word.trim().toUpperCase());
         setWordList(words);
