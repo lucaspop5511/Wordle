@@ -5,6 +5,7 @@ import Words from './Words';
 import Keyboard from './Keyboard';
 import History from './History';
 import CustomAlert from './CustomAlert';
+import Gamemode from './Gamemode';
 import './App.css';
 
 function App() {
@@ -18,10 +19,28 @@ function App() {
   const [gameResult, setGameResult] = useState(''); // 'won', 'lost', or ''
   const [invalidWord, setInvalidWord] = useState(false);
   const [wordList, setWordList] = useState([]);
+  const [gamemodeWordList, setGamemodeWordList] = useState([]);
   const [activePanel, setActivePanel] = useState('game'); // 'game' or 'history'
   const [gameHistory, setGameHistory] = useState([]);
   const [displayWord, setDisplayWord] = useState('*****');
   const [showAlert, setShowAlert] = useState(false);
+  const [currentGamemode, setCurrentGamemode] = useState('classic');
+
+  // Apply CSS variables for current gamemode
+  useEffect(() => {
+    const root = document.documentElement;
+    const gamemodeColors = {
+      classic: { primary: '#6aaa64', secondary: '#c9b458', secondaryfade: '#c9b45882'  },
+      names: { primary: '#0cc0df', secondary: '#4c6e9b', secondaryfade: '#4c6e9ba1' },
+      places: { primary: '#e4dedc', secondary: '#b6b1a4', secondaryfade: '#b6b1a4a9', text: '#3b3b3d' }
+    };
+    
+    const colors = gamemodeColors[currentGamemode];
+    root.style.setProperty('--primary-color', colors.primary);
+    root.style.setProperty('--secondary-color', colors.secondary);
+    root.style.setProperty('--secondary-color-fade', colors.secondaryfade);
+    root.style.setProperty('--text-color', colors.text);
+  }, [currentGamemode]);
 
   // Load game history from localStorage on component mount
   useEffect(() => {
@@ -68,25 +87,44 @@ function App() {
   }, [targetWord, guesses, gameResult]);
 
   useEffect(() => {
-    // Load dictionary from file
-    const loadDictionary = async () => {
+    // Load dictionaries
+    const loadDictionaries = async () => {
       try {
-        const response = await fetch('/dictionaryBrands.txt');
-        const text = await response.text();
-        const words = text.trim().split('\n').map(word => word.trim().toUpperCase());
-        setWordList(words);
+        // Always load the classic dictionary for validation
+        const classicResponse = await fetch('/dictionary.txt');
+        const classicText = await classicResponse.text();
+        const classicWords = classicText.trim().split('\n').map(word => word.trim().toUpperCase());
         
-        // Pick a random word when dictionary is loaded
-        const randomWord = words[Math.floor(Math.random() * words.length)];
+        // Load the gamemode-specific dictionary
+        const gamemodeFiles = {
+          classic: '/dictionary.txt',
+          names: '/dictionaryNames.txt',
+          places: '/dictionaryPlaces.txt'
+        };
+        
+        const gamemodeResponse = await fetch(gamemodeFiles[currentGamemode]);
+        const gamemodeText = await gamemodeResponse.text();
+        const gamemodeWords = gamemodeText.trim().split('\n').map(word => word.trim().toUpperCase());
+        
+        // For validation, combine classic + gamemode words (except for classic mode)
+        const validationWords = currentGamemode === 'classic' 
+          ? classicWords 
+          : [...new Set([...classicWords, ...gamemodeWords])];
+        
+        setWordList(validationWords);
+        setGamemodeWordList(gamemodeWords);
+        
+        // Pick a random word from the gamemode dictionary
+        const randomWord = gamemodeWords[Math.floor(Math.random() * gamemodeWords.length)];
         setTargetWord(randomWord);
       } catch (error) {
-        console.error('Failed to load dictionary:', error);
-        alert('Failed to load word dictionary. Please refresh the page.');
+        console.error('Failed to load dictionaries:', error);
+        alert('Failed to load word dictionaries. Please refresh the page.');
       }
     };
   
-    loadDictionary();
-  }, []);
+    loadDictionaries();
+  }, [currentGamemode]);
 
   // Physical keyboard listener
   useEffect(() => {
@@ -193,10 +231,25 @@ function App() {
   };
 
   const resetGame = () => {
-    if (wordList.length === 0) return;
+    if (gamemodeWordList.length === 0) return;
     
-    const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+    const randomWord = gamemodeWordList[Math.floor(Math.random() * gamemodeWordList.length)];
     setTargetWord(randomWord);
+    setCurrentGuess('');
+    setGuesses([]);
+    setCurrentRow(0);
+    setGameOver(false);
+    setKeyboardStatus({});
+    setGameResult('');
+    setIsValidating(false);
+    setInvalidWord(false);
+    setDisplayWord('*****');
+    setActivePanel('game');
+  };
+
+  const handleGamemodeChange = (gamemode) => {
+    setCurrentGamemode(gamemode.id);
+    // Reset game state when changing gamemode
     setCurrentGuess('');
     setGuesses([]);
     setCurrentRow(0);
@@ -227,6 +280,15 @@ function App() {
     setShowAlert(false);
   };
 
+  const getTitleLogo = () => {
+    const logoFiles = {
+      classic: '/titlelogo.png',
+      names: '/titlelogo-names.png',
+      places: '/titlelogo-places.png'
+    };
+    return logoFiles[currentGamemode] || logoFiles.classic;
+  };
+
   const getHeaderTitle = () => {
     if (activePanel === 'history') {
       return 'HISTORY';
@@ -237,7 +299,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img className='app-title' src='/titlelogo.png' alt='WordL'/>
+        <img className='app-title' src={getTitleLogo()} alt='WordL'/>
+        <Gamemode
+          currentGamemode={currentGamemode}
+          onGamemodeChange={handleGamemodeChange}
+        />
         
         <div className="game-section">
           <div className="section-header">

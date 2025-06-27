@@ -1,0 +1,103 @@
+.gamemode-dropdown {
+  position: relative;
+  margin-top: 0;
+  margin-bottom: 25px;
+  z-index: 100;
+  transform: translateX(-85px);
+  justify-self: left;
+}
+
+.gamemode-selector {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.gamemode-selector:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.gamemode-name {
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+}
+
+.dropdown-arrow {
+  font-size: 12px;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+.gamemode-options {
+  position: absolute;
+  top: -100px; /* Expands upwards */
+  left: 0;
+  right: 0;
+  height: 100px; /* Height of title logo area */
+  width: 280px;
+  background-color: rgba(18, 18, 19, 0.95);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.gamemode-option {
+  flex: 1;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.gamemode-option:last-child {
+  border-bottom: none;
+}
+
+.gamemode-option:hover {
+  background-color: var(--secondary-color-fade);
+}
+
+.gamemode-option.active {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .gamemode-selector {
+    font-size: 14px;
+    padding: 6px 10px;
+  }
+  
+  .gamemode-option {
+    font-size: 14px;
+  }
+}

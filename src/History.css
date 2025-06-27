@@ -59,13 +59,13 @@
 }
 
 .history-square.correct {
-  background-color: #6aaa64;
-  border-color: #6aaa64;
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
 }
 
 .history-square.present {
-  background-color: #c9b458;
-  border-color: #c9b458;
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
 }
 
 .history-square.absent {

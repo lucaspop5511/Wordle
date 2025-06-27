@@ -51,11 +51,11 @@ const History = ({ gameHistory, onClearHistory }) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= averageScore) {
-        stars.push(
+      stars.push(
           <FontAwesomeIcon 
             key={i} 
             icon={faStar} 
-            style={{ color: '#6aaa64' }} // Green color for filled stars
+            style={{ color: 'var(--primary-color)' }} // Primary color for filled stars
           />
         );
       } else {
@@ -63,7 +63,7 @@ const History = ({ gameHistory, onClearHistory }) => {
           <FontAwesomeIcon 
             key={i} 
             icon={faStar} 
-            style={{ color: '#c9b458' }} // Yellow color for empty stars
+            style={{ color: 'var(--secondary-color)' }} // Secondary color for empty stars
           />
         );
       }
