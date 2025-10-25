@@ -22,6 +22,7 @@
   color: white;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   animation: alertSlideIn 0.2s ease-out;
+  font-family: 'Courier New', monospace;
 }
 
 @keyframes alertSlideIn {
@@ -38,7 +39,8 @@
 .alert-header {
   display: flex;
   align-items: center;
-  padding: 20px 20px 10px 20px;
+  justify-content: center;
+  padding: 20px;
   border-bottom: 1px solid #3a3a3c;
   position: relative;
 }
@@ -62,10 +64,10 @@
 
 .alert-title {
   flex: 1;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: bold;
   margin: 0;
-  color: white;
+  color: rgb(228, 228, 228);
 }
 
 .alert-close {
@@ -94,15 +96,20 @@
 
 .alert-message {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   line-height: 1.5;
   color: #e0e0e0;
+  text-align: left;
+}
+
+.alert-message b {
+  color: var(--primary-color);
 }
 
 .alert-actions {
   display: flex;
   gap: 12px;
-  padding: 0 20px 20px 20px;
+  padding: 10px 20px 20px 20px;
   justify-content: flex-end;
 }
 
@@ -110,7 +117,8 @@
   padding: 12px 24px;
   border: none;
   border-radius: 6px;
-  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 15px;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.2s ease;

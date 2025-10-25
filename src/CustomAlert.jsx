@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTriangleExclamation, faTimes } from '@fortawesome/free-solid-svg-icons';
 import './CustomAlert.css';
 
-const CustomAlert = ({ isOpen, title, message, onConfirm, onCancel, confirmText = "Yes", cancelText = "No" }) => {
+const CustomAlert = ({ isOpen, title, message, gamemode, onConfirm, onCancel, confirmText = "Yes", cancelText = "No" }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,7 +20,7 @@ const CustomAlert = ({ isOpen, title, message, onConfirm, onCancel, confirmText 
         </div>
         
         <div className="alert-content">
-          <p className="alert-message">{message}</p>
+          <p className="alert-message">Are you sure you want to delete all <b>{gamemode}</b> game history?</p>
         </div>
         
         <div className="alert-actions">

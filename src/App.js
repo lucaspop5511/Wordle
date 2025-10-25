@@ -44,22 +44,24 @@ function App() {
 
   // Load game history from localStorage on component mount
   useEffect(() => {
-    const savedHistory = localStorage.getItem('wordleHistory');
+    const savedHistory = localStorage.getItem(`wordleHistory_${currentGamemode}`);
     if (savedHistory) {
       try {
         setGameHistory(JSON.parse(savedHistory));
       } catch (error) {
         console.error('Failed to load game history:', error);
       }
+    } else {
+      setGameHistory([]);
     }
-  }, []);
+  }, [currentGamemode]);
 
   // Save game history to localStorage whenever it changes
   useEffect(() => {
     if (gameHistory.length > 0) {
-      localStorage.setItem('wordleHistory', JSON.stringify(gameHistory));
+      localStorage.setItem(`wordleHistory_${currentGamemode}`, JSON.stringify(gameHistory));
     }
-  }, [gameHistory]);
+  }, [gameHistory, currentGamemode]);
 
   // Update display word based on submitted guesses only
   useEffect(() => {
@@ -259,7 +261,6 @@ function App() {
     setIsValidating(false);
     setInvalidWord(false);
     setDisplayWord('*****');
-    setActivePanel('game');
   };
 
   const togglePanel = () => {
@@ -272,7 +273,7 @@ function App() {
 
   const handleConfirmClearHistory = () => {
     setGameHistory([]);
-    localStorage.removeItem('wordleHistory');
+    localStorage.removeItem(`wordleHistory_${currentGamemode}`);
     setShowAlert(false);
   };
 
@@ -353,7 +354,7 @@ function App() {
       <CustomAlert
         isOpen={showAlert}
         title="Really?"
-        message="Are you sure you want to delete all game history?"
+        gamemode={currentGamemode.charAt(0).toUpperCase() + currentGamemode.slice(1)}
         onConfirm={handleConfirmClearHistory}
         onCancel={handleCancelClearHistory}
         confirmText="Delete"

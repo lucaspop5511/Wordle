@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: bold;
   color: rgb(246, 246, 246);
   background-color: #121213;
@@ -34,11 +34,12 @@
 .letter-box.present {
   background-color: var(--secondary-color);
   border-color: var(--secondary-color);
+  color: var(--text-color);
 }
 
 .letter-box.absent {
-  background-color: #787c7e;
-  border-color: #787c7e;
+  background-color: #313233;
+  border-color: #585a5c;
 }
 
 .letter-box.invalid {

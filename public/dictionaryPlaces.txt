@@ -14,7 +14,6 @@ haiti
 hanoi
 idaho
 india
-irish
 italy
 japan
 kabul
